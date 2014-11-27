@@ -30,6 +30,7 @@ gem 'doorkeeper', '1.3.1'
 gem 'doorkeeper-grants_assertion', github: "Inittec/doorkeeper-grants_assertion", branch: "master"
 
 gem 'geocoder'
+gem 'apipie-rails'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

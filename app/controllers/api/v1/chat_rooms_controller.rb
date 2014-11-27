@@ -2,19 +2,32 @@ module Api
   module V1
       class ChatRoomsController < Api::ApiController
         before_action :set_chat_room, only: [:show, :update, :destroy, :add_user, :delete_user, :send_message]
-        # GET /chat_rooms
-        # GET /chat_rooms.json
+
+        api :GET,"/v1/chat_rooms", "Lists all chatrooms within proximity"
+        param :latitude, Float, required:true
+        param :longitude, Float, required:true
+        param :radius, Integer, required:true
         def index
           @chat_rooms = ChatRoom.near([params[:latitude].to_f, params[:longitude].to_f], params[:radius].to_i).limit(10)
         end
 
-
+        api :GET,"/v1/chat_room", "Show chatroom"
+        param :id, Integer, "id of chatroom", required: true
+        error  401, "Unauthorized if user is not a member of chatroom"
+        example "{\n\t'id':1,\n\t'name':'coral',\n\t'latitude':45.35,\n\t'longitude':-120.56,\n\t'created_at':'2014-11-27T08:17:08.310Z',\n\t'updated_at':'2014-11-27T08:17:08.310Z',\n\t'users':[\n\t\t{'nick_name':'nate_dogz','id':1},\n\t\t{'nick_name':'fuck_dogz','id':2}],\n\t'messages':[\n\t\t{'content':'yo :)','user_id':1,'time':'2014-11-27T08:29:37.300Z'},\n\t\t{'content':'go fuck yourself','user_id':2,'time':'2014-11-27T08:29:47.795Z'},\n\t\t{'content':'thanks man','user_id':1,'time':'2014-11-27T18:46:40.237Z'}]\n}"
         def show
-          i=1
+          unless @chat_room.users.include?(resource_owner)
+            render json:{ status: :unauthorized }
+          end
         end
 
-        # POST /chat_rooms
-        # POST /chat_rooms.json
+
+        api :POST,"/v1/chat_rooms/create", "Create new chatroom"
+        param :chat_room, Hash, :required => true, :action_aware => true do
+          param :name, String, "Name of chatroom", :required => true
+          param :latitude, Float, "Latitude", :required => true
+          param :longitude, Float, "Longitude", :required => true
+        end
         def create
           @chat_room = ChatRoom.new(chat_room_params)
           @chat_room.admin_id=resource_owner.id
@@ -25,8 +38,15 @@ module Api
           end
         end
 
-        # PATCH/PUT /chat_rooms/1
-        # PATCH/PUT /chat_rooms/1.json
+        api :PATCH, "/v1/chat_room", "Update Existing Chat Room"
+        param :id, Integer, "Chat Room's Id", required:true
+        param :chat_room, Hash, required: true, action_aware: true do
+          param :name, String, "Name of chatroom"
+          param :latitude, Float, "Latitude"
+          param :longitude, Float, "Longitude"
+          param :admin_id,  Integer, "Admin_id"
+        end
+        error  401, "Unauthorized if user is not admin of chatroom"
         def update
           if @chat_room.admin!=resource_owner
             render json: @chat_room.errors, status: :unauthorized
@@ -39,8 +59,9 @@ module Api
           end
         end
 
-        # DELETE /chat_rooms/1
-        # DELETE /chat_rooms/1.json
+        api :DELETE, "/v1/chat_room", "Delete Existing Chat Room"
+        param :id, Integer, "Chat Room's Id", required:true
+        error  401, "Unauthorized if user is not admin of chatroom"
         def destroy
           if @chat_room.admin!=resource_owner
             render json: @chat_room.errors, status: :unauthorized
@@ -51,6 +72,9 @@ module Api
         end
 
         #  POST /chat_room/add_user
+        api :POST, "/v1/chat_room/add_user", "Add user to chat room"
+        param :id, Integer, "Chat Room's Id", required:true
+        error  422, "Unprocessable Entity"
         def add_user
 
           if (@chat_room.users << resource_owner).include?(resource_owner)
@@ -60,8 +84,11 @@ module Api
           end
         end
 
-        # DELETE /chat_room/delete_user
-        def delete_user
+
+        api :DELETE, "/v1/chat_room/remove_user", "Remove user to chat room"
+        param :id, Integer, "Chat Room's Id", required:true
+        error  422, "Unprocessable Entity"
+        def remove_user
           if (@chat_room.users.destroy(resource_owner).include?(resource_owner))
             render :show, status: :ok,  location: api_v1_chat_rooms_url
           else
@@ -71,6 +98,12 @@ module Api
 
 
         #POST
+        api :POST, "/v1/chat_room/send_message", "Send message to chat_room"
+        error  401, "Unauthorized if user is not a member of chatroom"
+        param :id, Integer, "Chat Room's Id", required:true
+        param :message, Hash, required: true do
+          param :content, String, "Content", required:true
+        end
         def send_message
           if(@chat_room.users.include?(resource_owner))
             message=@chat_room.messages.new

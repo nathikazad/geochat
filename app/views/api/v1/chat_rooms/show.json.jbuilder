@@ -3,8 +3,8 @@ json.users @chat_room.users do |user|
   json.nick_name user.nick_name
   json.id user.id
 end
-json.messages @chat_room.messages do |message|
+json.messages @chat_room.messages.last(20) do |message|
   json.content message.content
-  json.user    message.user.nick_name
+  json.user_id    message.user.id
   json.time     message.created_at
 end

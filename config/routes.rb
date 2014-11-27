@@ -1,13 +1,23 @@
 Rails.application.routes.draw do
 
-  use_doorkeeper
+  apipie
+  use_doorkeeper do
+    skip_controllers :applications, :authorized_applications, :authorizations
+  end
   namespace :api do
     namespace :v1 do
-      post 'chat_rooms/add_user'
-      delete'chat_rooms/delete_user'
-      post  'chat_rooms/send_message'
-      put   'users/update'
-      resources :users, :chat_rooms, :defaults => { :format => 'json' }
+      get     'user/chat_rooms',        to: 'users#chat_rooms',         format: 'json'
+      get     'user',                   to: 'users#show',               format: 'json'
+      patch   'user',                   to: 'users#update',             format: 'json'
+      delete  'user',                   to: 'user#destroy',             format: 'json'
+      get     'chat_rooms',             to: 'chat_rooms#index',         format: 'json'
+      post    'chat_rooms/create',      to: 'chat_rooms#create'        ,format: 'json'
+      post    'chat_room/add_user',     to: 'chat_rooms#add_user',      format: 'json'
+      delete  'chat_room/remove_user',  to: 'chat_rooms#remove_user',   format: 'json'
+      post    'chat_room/send_message', to: 'chat_rooms#send_message',  format: 'json'
+      get     'chat_room',              to: 'chat_rooms#show',          format: 'json'
+      patch   'chat_room',              to: 'chat_rooms#update',        format: 'json'
+      delete  'chat_room',              to: 'chat_rooms#destroy',       format: 'json'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.
