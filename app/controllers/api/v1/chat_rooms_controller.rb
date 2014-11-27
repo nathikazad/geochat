@@ -72,13 +72,17 @@ module Api
 
         #POST
         def send_message
-          message=@chat_room.messages.new
-          message.user=resource_owner
-          message.content=params[:message][:content]
-          if message.save
-            render :show, status: :created, location: api_v1_chat_rooms_url
+          if(@chat_room.users.include?(resource_owner))
+            message=@chat_room.messages.new
+            message.user=resource_owner
+            message.content=params[:message][:content]
+            if message.save
+              render :show, status: :created, location: api_v1_chat_rooms_url
+            else
+              render json: @chat_room.errors, status: :unprocessable_entity
+            end
           else
-            render json: @chat_room.errors, status: :unprocessable_entity
+            render json:{ status: :unauthorized }
           end
         end
 
