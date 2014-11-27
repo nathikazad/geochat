@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
+
   use_doorkeeper
   namespace :api do
     namespace :v1 do
       post 'chat_rooms/add_user'
       delete'chat_rooms/delete_user'
+      post  'chat_rooms/send_message'
+      put   'users/update'
       resources :users, :chat_rooms, :defaults => { :format => 'json' }
     end
   end

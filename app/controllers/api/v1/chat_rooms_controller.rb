@@ -1,7 +1,7 @@
 module Api
   module V1
       class ChatRoomsController < Api::ApiController
-        before_action :set_chat_room, only: [:show, :update, :destroy, :add_user, :delete_user]
+        before_action :set_chat_room, only: [:show, :update, :destroy, :add_user, :delete_user, :send_message]
         # GET /chat_rooms
         # GET /chat_rooms.json
         def index
@@ -69,6 +69,19 @@ module Api
           end
         end
 
+
+        #POST
+        def send_message
+          message=@chat_room.messages.new
+          message.user=resource_owner
+          message.content=params[:message][:content]
+          if message.save
+            render :show, status: :created, location: api_v1_chat_rooms_url
+          else
+            render json: @chat_room.errors, status: :unprocessable_entity
+          end
+        end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_chat_room
@@ -77,7 +90,7 @@ module Api
 
         # Never trust parameters from the scary internet, only allow the white list through.
         def chat_room_params
-          params.require(:chat_room).permit(:name, :latitude, :longitude, :radius, :admin_id)
+          params.require(:chat_room).permit(:name, :latitude, :longitude, :radius, :admin_id, message:[:content])
         end
     end
   end

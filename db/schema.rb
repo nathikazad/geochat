@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127052511) do
+ActiveRecord::Schema.define(version: 20141127080032) do
 
   create_table "chat_rooms", force: true do |t|
     t.string   "name"
@@ -22,10 +22,23 @@ ActiveRecord::Schema.define(version: 20141127052511) do
     t.datetime "updated_at"
   end
 
+  add_index "chat_rooms", ["admin_id"], name: "index_chat_rooms_on_admin_id"
+
   create_table "chat_rooms_users", id: false, force: true do |t|
     t.integer "chat_room_id"
     t.integer "user_id"
   end
+
+  create_table "messages", force: true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "chat_room_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["chat_room_id"], name: "index_messages_on_chat_room_id"
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id"
 
   create_table "oauth_access_grants", force: true do |t|
     t.integer  "resource_owner_id", null: false
