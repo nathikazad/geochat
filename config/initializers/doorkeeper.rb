@@ -3,13 +3,25 @@ Doorkeeper.configure do
   # Currently supported options are :active_record, :mongoid2, :mongoid3, :mongo_mapper
   orm :active_record
 
-  # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator do
-    fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
-    # Put your resource owner authentication logic here.
-    # Example implementation:
-    #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
+  resource_owner_from_assertion do
+    #facebook = URI.parse('https://graph.facebook.com/me?access_token=' +
+                             #params[:assertion])
+    #response = Net::HTTP.get_response(facebook)
+    #user_data = JSON.parse(response.body)
+    #u=User.find_by_facebook_id(user_data['id'])
+    #u.fb_name=user_data['name']
+    User.find_by_facebook_id(params[:fb_id])
   end
+
+  # add your supported grant types and other extensions
+  grant_flows %w(assertion)#S/ authorization_code implicit password client_credentials)
+  # # This block will be called to check whether the resource owner is authenticated or not.
+  # resource_owner_authenticator do
+  #   fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
+  #   # Put your resource owner authentication logic here.
+  #   # Example implementation:
+  #   #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
+  # end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   # admin_authenticator do
@@ -27,10 +39,10 @@ Doorkeeper.configure do
 
   # Reuse access token for the same resource owner within an application (disabled by default)
   # Rationale: https://github.com/doorkeeper-gem/doorkeeper/issues/383
-  # reuse_access_token
+  reuse_access_token
 
   # Issue access tokens with refresh token (disabled by default)
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of

@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   use_doorkeeper
+  namespace :api do
+    namespace :v1 do
+      post 'chat_rooms/add_user'
+      delete'chat_rooms/delete_user'
+      resources :users, :chat_rooms, :defaults => { :format => 'json' }
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
