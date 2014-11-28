@@ -7,8 +7,13 @@ module Api
         param :latitude, Float, required:true
         param :longitude, Float, required:true
         param :radius, Integer, required:true
+        param :offset, Integer, required:true
+        param :size, Integer, required:true
         def index
-          @chat_rooms = ChatRoom.near([params[:latitude].to_f, params[:longitude].to_f], params[:radius].to_i).limit(10)
+          @chat_rooms = ChatRoom.near([params[:latitude].to_f, params[:longitude].to_f], params[:radius].to_i).limit(100)
+          @chat_rooms.each{|cr| cr.distance=cr.distance_to([params[:latitude].to_f, params[:longitude].to_f])}
+          @chat_rooms=@chat_rooms.sort{|a,b| a.distance <=> b.distance}
+          @chat_rooms=@chat_rooms[params[:offset].to_i,params[:size].to_i]
         end
 
         api :GET,"/v1/chat_room", "Show chatroom"

@@ -1,5 +1,5 @@
 class ChatRoom < ActiveRecord::Base
-  attr_accessor :address
+  attr_accessor :address, :distance
   #include Geocoder::Model::ActiveRecord
   geocoded_by :address
   after_validation :geocode
