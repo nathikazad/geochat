@@ -1,7 +1,7 @@
 module Api
   module V1
       class ChatRoomsController < Api::ApiController
-        before_action :set_chat_room, only: [:show, :update, :destroy, :add_user, :delete_user, :send_message]
+        before_action :set_chat_room, only: [:show, :update, :destroy, :add_user, :remove_user, :send_message, :retrieve_messages]
 
         api :GET,"/v1/chat_rooms", "Lists all chatrooms within proximity"
         param :latitude, Float, required:true
@@ -119,6 +119,17 @@ module Api
           end
         end
 
+        api :GET, "/v1/chat_room/retrieve_messages", "retrieve messages since last retrieved message"
+        error  401, "Unauthorized if user is not a member of chatroom"
+        param :id, Integer, "Chat Room's Id", required:true
+        param :index, Integer, "index of last message", required:true
+        def retrieve_messages
+          if(@chat_room.users.include?(resource_owner))
+            @messages=@chat_room.messages_since(params[:index])
+          else
+            render json:{ status: :unauthorized }
+          end
+        end
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_chat_room

@@ -4,13 +4,13 @@ Doorkeeper.configure do
   orm :active_record
 
   resource_owner_from_assertion do
-    #facebook = URI.parse('https://graph.facebook.com/me?access_token=' +
-                             #params[:assertion])
-    #response = Net::HTTP.get_response(facebook)
-    #user_data = JSON.parse(response.body)
-    #u=User.find_by_facebook_id(user_data['id'])
-    #u.fb_name=user_data['name']
-    User.find_by_facebook_id(params[:fb_id])
+    facebook = URI.parse('https://graph.facebook.com/me?access_token=' + params[:assertion] + "&field=id,name")
+    response = Net::HTTP.get_response(facebook)
+    user_data = JSON.parse(response.body)
+    u=User.find_by_facebook_id(user_data['id'])
+    u.fb_name=user_data['name']
+    u.save
+    u
   end
 
   # add your supported grant types and other extensions

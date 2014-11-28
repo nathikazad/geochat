@@ -7,4 +7,9 @@ class ChatRoom < ActiveRecord::Base
   has_and_belongs_to_many :users, -> { uniq }
   has_many :messages
   belongs_to :admin, :class_name => 'User'
+
+
+  def messages_since(index)
+    self.messages.where("index_number>?",index)
+  end
 end

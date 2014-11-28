@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20141127080032) do
     t.string   "content"
     t.integer  "user_id"
     t.integer  "chat_room_id"
+    t.integer  "index_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
