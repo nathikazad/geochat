@@ -9,6 +9,7 @@ module Api
         param :radius, Integer, required:true
         param :offset, Integer, required:true
         param :size, Integer, required:true
+        description "order by least distance first. \n has attribute radius which gives distance from chatroom \n i offset=0 and size=10, returns the first 10 results "
         def index
           @chat_rooms = ChatRoom.near([params[:latitude].to_f, params[:longitude].to_f], params[:radius].to_i).limit(100)
           @chat_rooms.each{|cr| cr.distance=cr.distance_to([params[:latitude].to_f, params[:longitude].to_f])}
@@ -33,6 +34,7 @@ module Api
           param :latitude, Float, "Latitude", :required => true
           param :longitude, Float, "Longitude", :required => true
         end
+        description "Returns last 20 messages and every user in the chatroom"
         def create
           @chat_room = ChatRoom.new(chat_room_params)
           @chat_room.admin_id=resource_owner.id
