@@ -1,28 +1,19 @@
-== README
+To gain access to the API you need access token, which can be obtained by following these steps
+    1) Authenticate user using facebook and storing access_token provided by facebook for the user
+    2) Making a post request to server to <url>/oauth/token with params
+        client_id=<3rd party app's client id>,
+        client_secret=<3rd party app's client secret>,
+        grant_type="assertion"
+        assertion="<facebook's access token for authenticated user>"
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+       The post request will return access_token, expiration_time for access token and a refresh token
 
-Things you may want to cover:
+For subsequent requests on behalf of the user, you have to pass the access token along as one of the parameters regardless of request type
 
-* Ruby version
+Once the access token expires you have to obtain a new access_token and a refresh token by following this step
+    1) Making a post request to server to <url>/oauth/token with params
+        grant_type="refresh_token"
+        refresh_token=<refresh token from before>
 
-* System dependencies
+       The post request will return access_token, expiration_time for access token and a refresh token
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
