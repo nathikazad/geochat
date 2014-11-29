@@ -17,3 +17,7 @@ Once the access token expires you have to obtain a new access_token and a refres
 
        The post request will return access_token, expiration_time for access token and a refresh token
 
+
+Currently hosted at https://geochat-v1.herokuapp.com/apipie
+
+Contact nathik to get an client_id and password
