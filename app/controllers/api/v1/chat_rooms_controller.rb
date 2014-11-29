@@ -20,6 +20,7 @@ module Api
         api :GET,"/v1/chat_room", "Show chatroom"
         param :id, Integer, "id of chatroom", required: true
         error  401, "Unauthorized if user is not a member of chatroom"
+        description "Notes \n Returns last 20 messages and every user in the chatroom"
         example "{\n\t'id':1,\n\t'name':'coral',\n\t'latitude':45.35,\n\t'longitude':-120.56,\n\t'created_at':'2014-11-27T08:17:08.310Z',\n\t'updated_at':'2014-11-27T08:17:08.310Z',\n\t'users':[\n\t\t{'nick_name':'nate_dogz','id':1},\n\t\t{'nick_name':'fuck_dogz','id':2}],\n\t'messages':[\n\t\t{'content':'yo :)','user_id':1,'time':'2014-11-27T08:29:37.300Z'},\n\t\t{'content':'go fuck yourself','user_id':2,'time':'2014-11-27T08:29:47.795Z'},\n\t\t{'content':'thanks man','user_id':1,'time':'2014-11-27T18:46:40.237Z'}]\n}"
         def show
           unless @chat_room.users.include?(resource_owner)
@@ -34,7 +35,6 @@ module Api
           param :latitude, Float, "Latitude", :required => true
           param :longitude, Float, "Longitude", :required => true
         end
-        description "Returns last 20 messages and every user in the chatroom"
         def create
           @chat_room = ChatRoom.new(chat_room_params)
           @chat_room.admin_id=resource_owner.id
