@@ -9,7 +9,7 @@ module Api
         param :radius, Integer, required:true
         param :offset, Integer, required:true
         param :size, Integer, required:true
-        description "order by least distance first. \n has attribute radius which gives distance from chatroom \n i offset=0 and size=10, returns the first 10 results "
+        description "Notes \n Ordered by least distance first. \n It also has attribute radius which gives distance from chatroom \n if offset=0 and size=10, returns the first 10 results "
         def index
           @chat_rooms = ChatRoom.near([params[:latitude].to_f, params[:longitude].to_f], params[:radius].to_i).limit(100)
           @chat_rooms.each{|cr| cr.distance=cr.distance_to([params[:latitude].to_f, params[:longitude].to_f])}
