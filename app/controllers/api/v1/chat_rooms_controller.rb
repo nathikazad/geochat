@@ -75,7 +75,7 @@ module Api
             render json: @chat_room.errors, status: :unauthorized
           else
             @chat_room.destroy
-            format.json { head :no_content }
+            render json: "success",status: :ok
           end
         end
 
