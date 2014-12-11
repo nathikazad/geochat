@@ -7,8 +7,8 @@ Doorkeeper.configure do
     facebook = URI.parse('https://graph.facebook.com/me?access_token=' + params[:assertion] + "&field=id,name")
     response = Net::HTTP.get_response(facebook)
     user_data = JSON.parse(response.body)
-    u=User.find_by_facebook_id(user_data['id'])
-    u.fb_name=user_data['name']
+    u = User.find_by_facebook_id(user_data['id'])
+    u.fb_name = user_data['name']
     u.save
     u
   end
