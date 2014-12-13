@@ -4,6 +4,8 @@ class ChatRoom < ActiveRecord::Base
   geocoded_by :address
   after_validation :geocode
 
+  validates_presence_of :latitude, :longitude, :admin_id
+
   has_and_belongs_to_many :users, -> { uniq }
   has_many :messages
   belongs_to :admin, :class_name => 'User'
