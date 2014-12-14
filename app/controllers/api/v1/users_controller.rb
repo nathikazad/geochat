@@ -1,6 +1,5 @@
 module Api
   module V1
-
       class UsersController < ApiController
         before_action :set_user, only: [ :update, :destroy, :show, :chat_rooms]
 
