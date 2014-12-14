@@ -36,4 +36,6 @@ describe User do
     user = create(:user)
     expect(User.find_by_facebook_id(user.fb_id)).to eq(user)
   end
+
+  xit "returns the right messages when using #messages_since(index)"
 end

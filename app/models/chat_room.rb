@@ -10,7 +10,6 @@ class ChatRoom < ActiveRecord::Base
   has_many :messages
   belongs_to :admin, :class_name => 'User'
 
-
   def messages_since(index)
     self.messages.where("index_number>?",index)
   end
