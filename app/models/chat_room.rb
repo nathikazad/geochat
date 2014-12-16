@@ -10,7 +10,13 @@ class ChatRoom < ActiveRecord::Base
   has_many :messages
   belongs_to :admin, :class_name => 'User'
 
+  after_create :add_admin_to_chat_room
+
   def messages_since(index)
     self.messages.where("index_number>?",index)
+  end
+
+  def add_admin_to_chat_room
+    self.users << User.find_by(id: self.admin_id)
   end
 end
