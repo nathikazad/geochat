@@ -17,6 +17,6 @@ class ChatRoom < ActiveRecord::Base
   end
 
   def add_admin_to_chat_room
-    self.users << User.find_by(id: self.admin_id)
+    self.users << self.admin
   end
 end
