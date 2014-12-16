@@ -39,7 +39,6 @@ module Api
           @chat_room = ChatRoom.new(chat_room_params)
           @chat_room.admin_id=resource_owner.id
           if @chat_room.save
-            @chat_room.users << resource_owner
             render :show, status: :created, location: api_v1_chat_rooms_url
           else
             render json: @chat_room.errors, status: :unprocessable_entity
