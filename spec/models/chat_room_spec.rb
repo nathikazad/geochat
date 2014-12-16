@@ -33,6 +33,12 @@ describe ChatRoom do
     expect(room.admin_id).to eq(user.id)
   end
 
+  it "adds the admin into the chatroom" do
+    user = create(:user)
+    room = create(:chat_room, admin_id: user.id)
+    expect(room.users).to include(user)
+  end
+
   it "returns all the messages in the chatroom" do
     user = create(:user)
     room = create(:chat_room, admin_id: user.id)
