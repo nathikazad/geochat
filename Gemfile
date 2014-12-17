@@ -15,12 +15,14 @@ end
 group :test do
   gem "faker"
   gem "database_cleaner"
-  gem "pry"
+  gem "pry" 
 end
 
 group :production do
   gem 'pg'
 end
+
+gem 'pry'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -58,5 +60,5 @@ gem 'apipie-rails'
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
-#gem 'debugger', group: [:development, :test]
+# gem 'debugger', group: [:development, :test]
 
