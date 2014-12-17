@@ -31,11 +31,12 @@ describe Api::V1::UsersController, type: :request do
     
     context "with valid attributes" do
       it "updates the users nickname with the specified parameter" do
-        patch url, user: attributes_for(:user, nick_name: "new name"), :access_token => token.token
+        patch url, user: attributes_for(:user, nick_name: "new name"), access_token: token.token
         user.reload
         expect(user.nick_name).to eq("new name")
       end  
     end
+
     context "with invalid attributes" do
       it "returns invalid response code" do  
         patch url
@@ -43,4 +44,48 @@ describe Api::V1::UsersController, type: :request do
       end
     end
   end
+
+  describe "GET #chat_rooms" do
+    let(:url) { "/api/v1/user/chat_rooms" }
+
+    context "with valid atrtibutes" do 
+
+      it "returns a valid response code" do
+        get url, user: attributes_for(:user), access_token: token.token
+        expect(response.code).to eq("200")
+      end
+      it "returns the chat rooms of the current user" do
+        rooms = (1..3).map { create(:chat_room, admin_id: user.id)}
+        get url, user: attributes_for(:user), access_token: token.token
+        json = JSON.parse(response.body)
+        expect(json.first["name"]).to eq(rooms.first.name)
+        expect(json.second["latitude"]).to eq(rooms.second.latitude)
+        expect(json.third["longitude"]).to eq(rooms.third.longitude)
+      end
+    end
+
+    context "with invalid attributes" do
+      it "returns invalid response code" do
+        get url
+        expect(response.code).to eq("401")
+      end
+    end
+  end
+
+  # describe "DELETE #destroy", type: :controller do
+  #   let(:url) { "api/v1/user" }
+
+  #   context "with valid attributes" do
+  #     it "deletes the user" do
+  #       binding.pry
+  #       delete :destroy
+  #       # delete :destroy, format: :json
+  #       expect(:delete => url).to eq(false  )
+  #       # user: attributes_for(:user), access_token: token.token
+  #     end
+  #   end
+  #   context "with invalid attributes" do 
+  #     it "returns invalid response code"
+  #   end
+  # end
 end
