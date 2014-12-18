@@ -5,7 +5,7 @@ describe User do
     expect(build(:user)).to be_valid
   end
 
-  it "is valid with nickname, fb_id, and fb_name" do
+  it "is valid with nickname, fb_id, fb_name, and device_token" do
     expect(build(:user, nick_name: "imuzz")).to be_valid
   end
 
@@ -19,6 +19,12 @@ describe User do
     user = build(:user, fb_id: nil)
     user.valid?
     expect(user.errors[:fb_id]).to include("can't be blank")
+  end
+
+  it "is invalid without a device token" do
+    user = build(:user, device_token: nil)
+    user.valid?
+    expect(user.errors[device_token: nil]).to include("can't be blank")
   end
 
   it "is invalid with a duplicate facebook id" do
