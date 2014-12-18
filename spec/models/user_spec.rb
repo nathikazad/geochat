@@ -21,12 +21,6 @@ describe User do
     expect(user.errors[:fb_id]).to include("can't be blank")
   end
 
-  it "is invalid without a device token" do
-    user = build(:user, device_token: nil)
-    user.valid?
-    expect(user.errors[device_token: nil]).to include("can't be blank")
-  end
-
   it "is invalid with a duplicate facebook id" do
     art = create(:user)
     nathik = build(:user, fb_id: art.fb_id)
