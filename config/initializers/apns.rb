@@ -6,4 +6,3 @@
   device_token = "ba1d3340473f244737a56456bc72b9cc8ae027328e26fa158ce5e6b8f7ef26bf"
   # APNS.send_notification(device_token, "Fuck you bro")
 
-  binding.pry
