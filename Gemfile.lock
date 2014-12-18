@@ -38,6 +38,7 @@ GEM
       tzinfo (~> 1.1)
     apipie-rails (0.2.6)
       json
+    apns (1.0.0)
     arel (5.0.1.20140414130214)
     builder (3.2.2)
     coderay (1.1.0)
@@ -161,6 +162,7 @@ PLATFORMS
 
 DEPENDENCIES
   apipie-rails
+  apns
   coffee-rails (~> 4.0.0)
   database_cleaner
   doorkeeper (= 1.3.1)

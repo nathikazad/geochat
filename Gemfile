@@ -22,6 +22,7 @@ group :production do
   gem 'pg'
 end
 
+gem 'apns'
 gem 'pry'
 
 # Use SCSS for stylesheets
