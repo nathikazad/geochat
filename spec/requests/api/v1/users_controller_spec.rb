@@ -34,7 +34,12 @@ describe Api::V1::UsersController, type: :request do
         patch url, user: attributes_for(:user, nick_name: "new name"), access_token: token.token
         user.reload
         expect(user.nick_name).to eq("new name")
-      end  
+      end
+      it "updates the users device token with the specified parameter" do
+        patch url, user: attributes_for(:user, device_token: "somesecrettoken"), access_token: token.token
+        user.reload
+        expect(user.device_token).to eq("somesecrettoken")
+      end 
     end
 
     context "with invalid attributes" do
