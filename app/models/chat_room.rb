@@ -19,4 +19,13 @@ class ChatRoom < ActiveRecord::Base
   def add_admin_to_chat_room
     self.users << self.admin
   end
+
+  def device_tokens
+    # what if the user doesn't allow push notifications? still need to account
+    self.users.pluck(:device_token)
+  end
+
+  def self.send_notifications(room_id)
+    Notification.send_apns(ChatRoom.find_by(id: room_id).device_tokens)
+  end
 end
