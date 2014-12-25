@@ -14,6 +14,6 @@ class Message < ActiveRecord::Base
   end
 
   def notify_chat_room
-    ChatRoom.send_notifications(self.chat_room_id)
+    self.chat_room.send_notifications
   end
 end

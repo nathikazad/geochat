@@ -25,7 +25,7 @@ class ChatRoom < ActiveRecord::Base
     self.users.pluck(:device_token)
   end
 
-  def self.send_notifications(room_id)
-    Notification.send_apns(ChatRoom.find_by(id: room_id).device_tokens)
+  def send_notifications
+    Notification.send_apns(self.device_tokens)
   end
 end
