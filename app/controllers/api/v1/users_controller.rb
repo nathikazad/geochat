@@ -1,12 +1,12 @@
 module Api
   module V1
-
       class UsersController < ApiController
         before_action :set_user, only: [ :update, :destroy, :show, :chat_rooms]
 
         def_param_group :user do
           param :user, Hash, :required => true, :action_aware => true do
             param :nick_name, String, "Nick name of the user", :required => true
+            param :device_token, String, "Device Token of the current user", :required => true
           end
         end
 
@@ -43,7 +43,7 @@ module Api
 
         # Never trust parameters from the scary internet, only allow the white list through.
         def user_params
-          params.require(:user).permit(:nick_name)
+          params.require(:user).permit(:nick_name, :device_token)
         end
     end
   end

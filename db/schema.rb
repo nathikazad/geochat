@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20141127080032) do
     t.string   "nick_name"
     t.string   "fb_id"
     t.string   "fb_name"
+    t.string   "device_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

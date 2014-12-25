@@ -7,12 +7,23 @@ gem 'rails', '4.1.1'
 
 # Use sqlite3 as the database for Active Record
 group :test, :development do
-  #gem 'sqlite3'
+  gem 'sqlite3'
+  gem "rspec-rails", "~> 3.1.0"
+  gem "factory_girl_rails", "~> 4.4.1"
+end
+
+group :test do
+  gem "faker"
+  gem "database_cleaner"
+  gem "pry" 
 end
 
 group :production do
   gem 'pg'
 end
+
+gem 'apns'
+gem 'pry'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -50,5 +61,5 @@ gem 'apipie-rails'
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
-#gem 'debugger', group: [:development, :test]
+# gem 'debugger', group: [:development, :test]
 
