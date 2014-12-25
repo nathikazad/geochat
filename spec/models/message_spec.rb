@@ -14,11 +14,11 @@ describe Message, :type => :model do
       expect(build(:message, content: "")).to be_invalid
     end
 
-    it "is invlaid without a user_id" do
+    it "is invalid without a user_id" do
       expect(build(:message, user_id: nil)).to be_invalid
     end
     
-    it "is invlaid without a chat_room_id" do
+    it "is invalid without a chat_room_id" do
       expect(build(:message, chat_room_id: nil)).to be_invalid
     end
   end  
