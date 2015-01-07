@@ -33,7 +33,6 @@ module Api
         api :PATCH, "/v1/user/connected", "Update the current users connected status"
         param_group :user_connected
         def update_connected
-          # binding.pry
           params["user"]["connected"] = params["user"]["connected"].to_b
           if @user.update(user_connected)
             render :show, status: :ok, location: api_v1_user_connected_url
