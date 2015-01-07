@@ -18,7 +18,7 @@ describe Api::V1::UsersController, type: :request do
       end
     end
 
-    context "with invalid attributes" do
+    context "with invalid credentials" do
       it "returns invalid response code" do
         get url
         expect(response.code).to eq("401")
@@ -42,10 +42,34 @@ describe Api::V1::UsersController, type: :request do
       end 
     end
 
-    context "with invalid attributes" do
+    context "with invalid credentials" do
       it "returns invalid response code" do  
         patch url
         expect(response.code).to eq("401")
+      end
+    end
+  end
+
+  describe "PATCH #update_connected" do
+    let(:url) { "/api/v1/user/connected" }
+
+    context "with valid attributes" do
+      it "updates connected status of the user with valid paramter" do
+        patch url, user: attributes_for(:user, connected: "true"), access_token: token.token
+        user.reload
+        expect(user.connected).to eq(true)
+      end
+    end
+
+    context "with invalid attributes" do
+      it "returns invalid response code with invalid credentials" do  
+        patch url
+        expect(response.code).to eq("401")
+      end
+      it "does not update the connected status with invalid parameter type" do
+        patch url, user: attributes_for(:user, connected: "invalid"), access_token: token.token
+        user.reload
+        expect(user.connected).to eq(false)
       end
     end
   end
@@ -69,7 +93,7 @@ describe Api::V1::UsersController, type: :request do
       end
     end
 
-    context "with invalid attributes" do
+    context "with invalid credentials" do
       it "returns invalid response code" do
         get url
         expect(response.code).to eq("401")
