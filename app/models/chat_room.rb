@@ -20,12 +20,23 @@ class ChatRoom < ActiveRecord::Base
     self.users << self.admin
   end
 
-  def device_tokens
-    # what if the user doesn't allow push notifications? still need to account
-    self.users.pluck(:device_token)
+  def device_tokens_of_disconnected
+    self.users.where(connected: false).pluck(:device_token)
   end
 
-  def send_notifications
-    Notification.send_apns(self.device_tokens)
+  def device_tokens_of_connected
+    self.users.where(connected: true).pluck(:device_token)
+  end
+
+  def connected_users
+    self.users.where(connected: true)
+  end
+
+  def send_notifications(message)
+    Notification.send_apns(self.device_tokens_of_disconnected)
+    connected_users.map do |user| 
+      channel_name = "/" + Digest::SHA256.hexdigest("#{user.id}")
+      Notification.broadcast channel_name, message
+    end
   end
 end
