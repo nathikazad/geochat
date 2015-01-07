@@ -54,10 +54,16 @@ describe Api::V1::UsersController, type: :request do
     let(:url) { "/api/v1/user/connected" }
 
     context "with valid attributes" do
-      it "updates connected status of the user with valid paramter" do
+      it "updates connected status of the user with valid parameter of true" do
         patch url, user: attributes_for(:user, connected: "true"), access_token: token.token
         user.reload
         expect(user.connected).to eq(true)
+      end
+      it "updates connected status of the user with valid parameter of false" do
+        user = create(:user, connected: false)
+        patch url, user: attributes_for(:user, connected: "false"), access_token: token.token
+        user.reload
+        expect(user.connected).to eq(false)
       end
     end
 
