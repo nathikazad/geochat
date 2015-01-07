@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get     'user/chat_rooms',            to: 'users#chat_rooms',             format: 'json'
       get     'user',                       to: 'users#show',                   format: 'json'
       patch   'user',                       to: 'users#update',                 format: 'json'
+      patch   'user/connected',             to: 'users#update_connected',       format: 'json'
       delete  'user',                       to: 'user#destroy',                 format: 'json'
       get     'chat_rooms',                 to: 'chat_rooms#index',             format: 'json'
       post    'chat_rooms/create',          to: 'chat_rooms#create',            format: 'json'
