@@ -4,5 +4,9 @@ FactoryGirl.define do
       fb_name { Faker::Name.name }
       nick_name { Faker::Name.name }
       device_token { Faker::Internet.password(64) }
+      connected {}
+    end
+    
+    factory :invalid_user, class: User do
     end
 end
