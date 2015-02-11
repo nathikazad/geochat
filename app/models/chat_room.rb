@@ -32,11 +32,4 @@ class ChatRoom < ActiveRecord::Base
     self.users.where(connected: true)
   end
 
-  def send_notifications(message)
-    Notification.send_apns(self.device_tokens_of_disconnected)
-    connected_users.map do |user| 
-      channel_name = "/" + Digest::SHA256.hexdigest("#{user.id}")
-      Notification.broadcast channel_name, message
-    end
-  end
 end
