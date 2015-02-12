@@ -20,16 +20,5 @@ class ChatRoom < ActiveRecord::Base
     self.users << self.admin
   end
 
-  def device_tokens_of_disconnected
-    self.users.where(connected: false).pluck(:device_token)
-  end
-
-  def device_tokens_of_connected
-    self.users.where(connected: true).pluck(:device_token)
-  end
-
-  def connected_users
-    self.users.where(connected: true)
-  end
 
 end

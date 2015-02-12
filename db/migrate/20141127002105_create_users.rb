@@ -6,7 +6,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :fb_name
       t.string :device_token
       t.string :channel_name
-      t.boolean :connected, default: false
 
       t.timestamps
     end

@@ -7,6 +7,9 @@ class Message < ActiveRecord::Base
   before_create :add_index
   after_create :notify
 
+
+
+private
   def add_index
     if chat_room.messages.count == 0
       self.index_number=1
@@ -15,26 +18,11 @@ class Message < ActiveRecord::Base
     end
   end
 
-
-
   def notify
-    #Notification.send_apns(self.device_tokens_of_disconnected)
-    chat_room.connected_users.map do |user|
-      #channel_name = "/" + Digest::SHA256.hexdigest("#{user.id}")
-      channel_name = "/server"
-      broadcast channel_name, jsonify_for_notification
+    #bulk notify APNS if its faster
+    chat_room.users.map do |user|
+      user.notify jsonify_for_notification
     end
-  end
-
-  def send_apns(device_tokens, json_data)
-    notifications = device_tokens.map { |device_token| APNS::Notification.new(device_token, json_data ) }
-    APNS.send_notifications(notifications)
-  end
-
-  def broadcast(channel, json_data)
-    message = {:channel => channel, :data => json_data, :ext => {:auth_token => "test"}}
-    uri = URI.parse("http://localhost:9292/faye")
-    Net::HTTP.post_form(uri, :message => message.to_json)
   end
 
   def jsonify_for_notification
